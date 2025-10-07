@@ -15,7 +15,6 @@ export function Navbar() {
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     setAuthed(!!token);
-    // try to decode role from payload (best-effort)
     try {
       if (token) {
         const payload = JSON.parse(atob(token.split(".")[1] || ""));
@@ -65,6 +64,8 @@ export function Navbar() {
                 {item.name}
               </Link>
             ))}
+
+            {/* Login/Admin first */}
             {authed && role === "admin" ? (
               <Link
                 to="/admin"
@@ -90,6 +91,8 @@ export function Navbar() {
                 <LogOut size={18} /> Logout
               </button>
             )}
+
+            {/* Get Started at the end/right */}
             <Link
               to="/contact"
               className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
@@ -127,6 +130,7 @@ export function Navbar() {
                   {item.name}
                 </Link>
               ))}
+              {/* Login/Admin above Get Started */}
               {authed && role === "admin" ? (
                 <Link
                   to="/admin"
@@ -161,6 +165,7 @@ export function Navbar() {
                   </span>
                 </button>
               )}
+              {/* Get Started last */}
               <Link
                 to="/contact"
                 className="block px-3 py-2 text-base font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
@@ -178,15 +183,12 @@ export function Navbar() {
         onClose={() => setAuthOpen(false)}
         onAuthed={() => {
           setAuthOpen(false);
-          // Re-evaluate token/role
           const token = localStorage.getItem("authToken");
           if (token) {
             try {
               const payload = JSON.parse(atob(token.split(".")[1] || ""));
               if (payload?.role === "admin") {
                 window.location.href = "/admin";
-              } else {
-                // stay on current page
               }
             } catch {}
           }

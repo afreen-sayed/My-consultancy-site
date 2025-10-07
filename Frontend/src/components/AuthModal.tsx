@@ -47,8 +47,8 @@ export default function AuthModal({ isOpen, onClose, onAuthed }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-md max-h-[90vh] overflow-auto bg-white rounded-xl shadow-lg p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-slate-900">
             {mode === "login" ? "Login" : "Register"}
