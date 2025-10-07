@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { API_URL } from "../lib/config";
 
 type Props = {
   isOpen: boolean;
@@ -34,8 +35,8 @@ export default function AuthModal({ isOpen, onClose, onAuthed }: Props) {
     try {
       const url =
         mode === "login"
-          ? "http://localhost:5000/api/auth/login"
-          : "http://localhost:5000/api/auth/register";
+          ? `${API_URL}/api/auth/login`
+          : `${API_URL}/api/auth/register`;
       const body: any = { email, password };
       if (mode === "register") body.name = name;
       const res = await fetch(url, {
