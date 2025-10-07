@@ -3,6 +3,7 @@
 import type React from "react";
 import { useState } from "react";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { API_URL } from "../lib/config";
 
 interface ContactForm {
   name: string;
@@ -43,7 +44,7 @@ const Contact: React.FC = () => {
     setSubmitError("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/contact", {
+      const response = await fetch(`${API_URL}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,17 +86,17 @@ const Contact: React.FC = () => {
     {
       icon: <Phone className="w-6 h-6" />,
       title: "Phone Number",
-      details: ["+1 (555) 123-4567", "+1 (555) 987-6543"],
+      details: ["(555) 123-4567", "(555) 987-6543"],
     },
     {
       icon: <Mail className="w-6 h-6" />,
       title: "Email Address",
-      details: ["info@consultpro.com", "support@consultpro.com"],
+      details: ["contact@consultingpro.com", "support@consultingpro.com"],
     },
     {
       icon: <Clock className="w-6 h-6" />,
       title: "Business Hours",
-      details: ["Mon - Fri: 9:00 AM - 6:00 PM", "Sat: 10:00 AM - 4:00 PM"],
+      details: ["Mon - Fri: 9:00 AM - 6:00 PM", "Sat: 10:00 AM - 2:00 PM"],
     },
   ];
 

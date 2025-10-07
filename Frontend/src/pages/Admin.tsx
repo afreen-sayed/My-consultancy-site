@@ -3,6 +3,7 @@
 import type React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../lib/config";
 import {
   Users,
   MessageSquare,
@@ -54,7 +55,7 @@ const Admin: React.FC = () => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/contacts");
+      const response = await fetch(`${API_URL}/api/contacts`);
       const result = await response.json();
 
       if (result.success) {
@@ -75,7 +76,7 @@ const Admin: React.FC = () => {
     status: ConsultationRequest["status"]
   ) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/contacts/${id}`, {
+      const response = await fetch(`${API_URL}/api/contacts/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +112,7 @@ const Admin: React.FC = () => {
 
   const deleteRequest = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/contacts/${id}`, {
+      const response = await fetch(`${API_URL}/api/contacts/${id}`, {
         method: "DELETE",
       });
 
@@ -190,7 +191,7 @@ const Admin: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:5000/api/auth/logout", {
+      await fetch(`${API_URL}/api/auth/logout`, {
         method: "POST",
         credentials: "include",
       });
