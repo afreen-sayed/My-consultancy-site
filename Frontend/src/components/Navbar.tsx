@@ -183,15 +183,25 @@ export function Navbar() {
         onClose={() => setAuthOpen(false)}
         onAuthed={() => {
           setAuthOpen(false);
-          const token = localStorage.getItem("authToken");
-          if (token) {
-            try {
-              const payload = JSON.parse(atob(token.split(".")[1] || ""));
-              if (payload?.role === "admin") {
-                window.location.href = "/admin";
+          // Wait for state to update and token to be stored
+          setTimeout(() => {
+            const token = localStorage.getItem("authToken");
+            if (token) {
+              try {
+                const payload = JSON.parse(atob(token.split(".")[1] || ""));
+                if (payload?.role === "admin") {
+                  // Use window.location to ensure full page navigation
+                  window.location.href = "/admin";
+                } else {
+                  // Regular user - just refresh to update UI
+                  window.location.reload();
+                }
+              } catch (error) {
+                console.error("Token parsing error:", error);
+                window.location.reload();
               }
-            } catch {}
-          }
+            }
+          }, 100);
         }}
       />
     </nav>
