@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 type Props = {
   isOpen: boolean;
@@ -13,6 +14,16 @@ export default function AuthModal({ isOpen, onClose, onAuthed }: Props) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (isOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -46,7 +57,7 @@ export default function AuthModal({ isOpen, onClose, onAuthed }: Props) {
     }
   };
 
-  return (
+  const modal = (
     <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 p-4">
       <div className="w-full max-w-md max-h-[90vh] overflow-auto bg-white rounded-xl shadow-lg p-6">
         <div className="flex items-center justify-between mb-4">
@@ -56,6 +67,7 @@ export default function AuthModal({ isOpen, onClose, onAuthed }: Props) {
           <button
             onClick={onClose}
             className="text-slate-500 hover:text-slate-700"
+            aria-label="Close"
           >
             ✕
           </button>
@@ -135,4 +147,6 @@ export default function AuthModal({ isOpen, onClose, onAuthed }: Props) {
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 }
