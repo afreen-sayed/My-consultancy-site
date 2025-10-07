@@ -10,19 +10,33 @@ const User = require("./models/User");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const isProd = process.env.NODE_ENV === "production";
 
-// Middleware
+// Trust proxy for correct secure cookies behind reverse proxy (Render/Vercel/etc.)
+app.set("trust proxy", 1);
+
+// CORS setup with env-based origins
+const allowedOrigins = (
+  "https://my-consultancy-site-frontend.onrender.com" ||
+  [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:5175",
+    "http://localhost:5176",
+    "http://localhost:5177",
+  ].join(",")
+)
+  .split(",")
+  .map((o) => o.trim());
+
 app.use(
   cors({
-    origin: [
-      "https://my-consultancy-site-frontend.onrender.com",
-      "http://localhost:3000",
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5175",
-      "http://localhost:5176",
-      "http://localhost:5177",
-    ],
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // allow mobile apps / curl
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error(`CORS blocked for origin ${origin}`));
+    },
     credentials: true,
   })
 );
@@ -329,6 +343,7 @@ app.get("/api/dashboard/stats", async (req, res) => {
   }
 });
 
+// Auth routes
 app.post("/api/auth/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -344,7 +359,11 @@ app.post("/api/auth/register", async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, passwordHash });
     const token = signToken(user);
-    res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: isProd ? "none" : "lax",
+      secure: isProd,
+    });
     return res.status(201).json({
       success: true,
       user: {
@@ -376,7 +395,11 @@ app.post("/api/auth/login", async (req, res) => {
         .status(401)
         .json({ success: false, message: "Invalid credentials" });
     const token = signToken(user);
-    res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: isProd ? "none" : "lax",
+      secure: isProd,
+    });
     return res.json({
       success: true,
       user: {
@@ -395,7 +418,11 @@ app.post("/api/auth/login", async (req, res) => {
 });
 
 app.post("/api/auth/logout", (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: isProd ? "none" : "lax",
+    secure: isProd,
+  });
   return res.json({ success: true });
 });
 
