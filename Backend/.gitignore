@@ -3,6 +3,7 @@ cd Backend
 
 # Create .gitignore file
 echo "node_modules/
+node_modules
 .env
 .DS_Store
 *.log
