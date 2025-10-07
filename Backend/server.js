@@ -16,30 +16,35 @@ const isProd = process.env.NODE_ENV === "production";
 app.set("trust proxy", 1);
 
 // CORS setup with env-based origins
-const allowedOrigins = (
-  "https://my-consultancy-site-frontend.onrender.com" ||
-  [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://localhost:5175",
-    "http://localhost:5176",
-    "http://localhost:5177",
-  ].join(",")
-)
-  .split(",")
-  .map((o) => o.trim());
+const allowedOrigins = [
+  "https://my-consultancy-site-frontend.onrender.com",
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+  "http://localhost:5176",
+  "http://localhost:5177",
+];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true); // allow mobile apps / curl
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error(`CORS blocked for origin ${origin}`));
+      // Allow requests with no origin (like mobile apps or Postman)
+      if (!origin) return callback(null, true);
+
+      // Check if origin is in allowed list
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        return callback(null, true);
+      } else {
+        console.log("CORS blocked for origin:", origin);
+        return callback(new Error("Not allowed by CORS"));
+      }
     },
     credentials: true,
   })
 );
+
+app.options("*", cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
