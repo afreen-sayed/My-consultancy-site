@@ -1,12 +1,32 @@
 "use client";
 
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Menu, X, User as UserIcon, LogOut } from "lucide-react";
+import AuthModal from "./AuthModal";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const [authOpen, setAuthOpen] = useState(false);
+  const [role, setRole] = useState<string | null>(null);
+  const [authed, setAuthed] = useState<boolean>(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    setAuthed(!!token);
+    // try to decode role from payload (best-effort)
+    try {
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1] || ""));
+        setRole(payload?.role || null);
+      } else {
+        setRole(null);
+      }
+    } catch {
+      setRole(null);
+    }
+  }, [location.pathname]);
 
   const navigation = [
     { name: "Home", href: "/" },
@@ -14,6 +34,11 @@ export function Navbar() {
     { name: "Services", href: "/services" },
     { name: "Contact", href: "/contact" },
   ];
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    window.location.href = "/";
+  };
 
   return (
     <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b border-border/40">
@@ -26,7 +51,7 @@ export function Navbar() {
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -40,6 +65,31 @@ export function Navbar() {
                 {item.name}
               </Link>
             ))}
+            {authed && role === "admin" ? (
+              <Link
+                to="/admin"
+                className="text-sm font-medium text-foreground hover:text-primary"
+              >
+                Admin
+              </Link>
+            ) : (
+              <button
+                onClick={() => setAuthOpen(true)}
+                className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary"
+                title="Login"
+              >
+                <UserIcon size={18} /> Login
+              </button>
+            )}
+            {authed && (
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary"
+                title="Logout"
+              >
+                <LogOut size={18} /> Logout
+              </button>
+            )}
             <Link
               to="/contact"
               className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
@@ -77,6 +127,40 @@ export function Navbar() {
                   {item.name}
                 </Link>
               ))}
+              {authed && role === "admin" ? (
+                <Link
+                  to="/admin"
+                  onClick={() => setIsOpen(false)}
+                  className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary"
+                >
+                  Admin
+                </Link>
+              ) : (
+                <button
+                  onClick={() => {
+                    setAuthOpen(true);
+                    setIsOpen(false);
+                  }}
+                  className="block px-3 py-2 text-left w-full text-base font-medium text-foreground hover:text-primary"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <UserIcon size={18} /> Login
+                  </span>
+                </button>
+              )}
+              {authed && (
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
+                  className="block px-3 py-2 text-left w-full text-base font-medium text-foreground hover:text-primary"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <LogOut size={18} /> Logout
+                  </span>
+                </button>
+              )}
               <Link
                 to="/contact"
                 className="block px-3 py-2 text-base font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
@@ -88,6 +172,26 @@ export function Navbar() {
           </div>
         )}
       </div>
+
+      <AuthModal
+        isOpen={authOpen}
+        onClose={() => setAuthOpen(false)}
+        onAuthed={() => {
+          setAuthOpen(false);
+          // Re-evaluate token/role
+          const token = localStorage.getItem("authToken");
+          if (token) {
+            try {
+              const payload = JSON.parse(atob(token.split(".")[1] || ""));
+              if (payload?.role === "admin") {
+                window.location.href = "/admin";
+              } else {
+                // stay on current page
+              }
+            } catch {}
+          }
+        }}
+      />
     </nav>
   );
 }

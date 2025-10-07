@@ -32,7 +32,7 @@ app.use(cookieParser());
 
 function signToken(user) {
   return jwt.sign(
-    { uid: user._id, email: user.email },
+    { uid: user._id, email: user.email, role: user.role },
     process.env.JWT_SECRET || "dev_secret",
     { expiresIn: "7d" }
   );
@@ -347,7 +347,12 @@ app.post("/api/auth/register", async (req, res) => {
     res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
     return res.status(201).json({
       success: true,
-      user: { id: user._id, email: user.email, name: user.name },
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
       token,
     });
   } catch (err) {
@@ -374,7 +379,12 @@ app.post("/api/auth/login", async (req, res) => {
     res.cookie("token", token, { httpOnly: true, sameSite: "lax" });
     return res.json({
       success: true,
-      user: { id: user._id, email: user.email, name: user.name },
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
       token,
     });
   } catch (err) {
@@ -390,7 +400,7 @@ app.post("/api/auth/logout", (req, res) => {
 });
 
 app.get("/api/auth/me", authMiddleware, async (req, res) => {
-  const user = await User.findById(req.user.uid).select("name email");
+  const user = await User.findById(req.user.uid).select("name email role");
   if (!user) return res.status(404).json({ success: false });
   return res.json({ success: true, user });
 });
