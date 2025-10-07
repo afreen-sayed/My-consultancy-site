@@ -1,0 +1,15 @@
+# Navigate to Backend folder
+cd Backend
+
+# Create .gitignore file
+echo "node_modules/
+.env
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json" > .gitignore
+
+# Go back to main folder
+cd ..
