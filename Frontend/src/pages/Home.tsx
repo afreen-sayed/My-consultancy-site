@@ -115,29 +115,37 @@ export function Home() {
               </Link>
             </div>
 
-            <div className="relative pb-12 sm:pb-0">
+            <div className="relative">
               <img
                 src="/professional-business-meeting-consultation.jpg"
                 alt="Professional consultation meeting"
                 className="w-full h-auto rounded-lg shadow-2xl"
               />
-              <div className="absolute bottom-4 left-4 sm:-bottom-6 sm:-left-6 bg-card/95 backdrop-blur p-6 rounded-lg shadow-lg border border-border/40">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        size={16}
-                        className="fill-primary text-primary"
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm font-medium">5.0</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Centered Trust Badge (moved out of image) */}
+      <section className="py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto w-full sm:max-w-md">
+            <div className="bg-card/95 backdrop-blur p-6 rounded-lg shadow-lg border border-border/40 text-center">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      size={16}
+                      className="fill-primary text-primary"
+                    />
+                  ))}
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  Trusted by 500+ companies
-                </p>
+                <span className="text-sm font-medium">5.0</span>
               </div>
+              <p className="text-sm text-muted-foreground">
+                Trusted by 500+ companies
+              </p>
             </div>
           </div>
         </div>

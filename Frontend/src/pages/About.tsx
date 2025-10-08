@@ -87,21 +87,29 @@ export function About() {
               </div>
             </div>
 
-            <div className="relative pb-12 sm:pb-0">
+            <div>
               <img
                 src="/professional-team-collaboration.png"
                 alt="Professional team collaboration"
                 className="w-full h-auto rounded-lg shadow-2xl"
               />
-              <div className="absolute bottom-4 right-4 sm:-bottom-6 sm:-right-6 bg-card/95 backdrop-blur p-6 rounded-lg shadow-lg border border-border/40">
-                <div className="flex items-center gap-2 mb-2">
-                  <Award size={20} className="text-primary" />
-                  <span className="font-semibold">Industry Recognition</span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Top consulting firm 2024
-                </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Centered Industry Recognition Badge */}
+      <section className="py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto w-full sm:max-w-md">
+            <div className="bg-card/95 backdrop-blur p-6 rounded-lg shadow-lg border border-border/40 text-center">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Award size={20} className="text-primary" />
+                <span className="font-semibold">Industry Recognition</span>
               </div>
+              <p className="text-sm text-muted-foreground">
+                Top consulting firm 2024
+              </p>
             </div>
           </div>
         </div>
