@@ -89,7 +89,7 @@ export function About() {
 
             <div className="relative">
               <img
-                src="/professional-team-collaboration.jpg"
+                src="/professional-team-collaboration.png"
                 alt="Professional team collaboration"
                 className="rounded-lg shadow-2xl"
               />

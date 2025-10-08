@@ -11,21 +11,30 @@ export function Navbar() {
   const [authOpen, setAuthOpen] = useState(false);
   const [role, setRole] = useState<string | null>(null);
   const [authed, setAuthed] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
+    const userStr = localStorage.getItem("authUser");
     setAuthed(!!token);
     try {
-      if (token) {
+      if (userStr) {
+        const u = JSON.parse(userStr);
+        setUserName(u?.name || u?.email || null);
+        setRole(u?.role || null);
+      } else if (token) {
         const payload = JSON.parse(atob(token.split(".")[1] || ""));
         setRole(payload?.role || null);
+        setUserName(payload?.email || null);
       } else {
         setRole(null);
+        setUserName(null);
       }
     } catch {
       setRole(null);
+      setUserName(null);
     }
-  }, [location.pathname]);
+  }, [location.pathname, authOpen]);
 
   const navigation = [
     { name: "Home", href: "/" },
@@ -36,6 +45,7 @@ export function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
+    localStorage.removeItem("authUser");
     window.location.href = "/";
   };
 
@@ -65,14 +75,19 @@ export function Navbar() {
               </Link>
             ))}
 
-            {/* Login/Admin first */}
-            {authed && role === "admin" ? (
-              <Link
-                to="/admin"
-                className="text-sm font-medium text-foreground hover:text-primary"
-              >
-                Admin
-              </Link>
+            {/* Get Started first at the end section */}
+            <Link
+              to="/contact"
+              className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
+            >
+              Get Started
+            </Link>
+
+            {/* Then auth area: show name if logged, else Login button */}
+            {authed ? (
+              <span className="text-sm font-medium text-foreground">
+                {userName}
+              </span>
             ) : (
               <button
                 onClick={() => setAuthOpen(true)}
@@ -82,6 +97,8 @@ export function Navbar() {
                 <UserIcon size={18} /> Login
               </button>
             )}
+
+            {/* Logout shown only if logged */}
             {authed && (
               <button
                 onClick={handleLogout}
@@ -92,13 +109,15 @@ export function Navbar() {
               </button>
             )}
 
-            {/* Get Started at the end/right */}
-            <Link
-              to="/contact"
-              className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
-            >
-              Get Started
-            </Link>
+            {/* Admin link if admin */}
+            {authed && role === "admin" && (
+              <Link
+                to="/admin"
+                className="text-sm font-medium text-foreground hover:text-primary"
+              >
+                Admin
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -130,15 +149,21 @@ export function Navbar() {
                   {item.name}
                 </Link>
               ))}
-              {/* Login/Admin above Get Started */}
-              {authed && role === "admin" ? (
-                <Link
-                  to="/admin"
-                  onClick={() => setIsOpen(false)}
-                  className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary"
-                >
-                  Admin
-                </Link>
+
+              {/* Get Started */}
+              <Link
+                to="/contact"
+                className="block px-3 py-2 text-base font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                Get Started
+              </Link>
+
+              {/* Auth area */}
+              {authed ? (
+                <div className="px-3 py-2 text-base font-medium text-foreground">
+                  {userName}
+                </div>
               ) : (
                 <button
                   onClick={() => {
@@ -152,6 +177,7 @@ export function Navbar() {
                   </span>
                 </button>
               )}
+
               {authed && (
                 <button
                   onClick={() => {
@@ -165,14 +191,16 @@ export function Navbar() {
                   </span>
                 </button>
               )}
-              {/* Get Started last */}
-              <Link
-                to="/contact"
-                className="block px-3 py-2 text-base font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                Get Started
-              </Link>
+
+              {authed && role === "admin" && (
+                <Link
+                  to="/admin"
+                  onClick={() => setIsOpen(false)}
+                  className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary"
+                >
+                  Admin
+                </Link>
+              )}
             </div>
           </div>
         )}
@@ -183,25 +211,15 @@ export function Navbar() {
         onClose={() => setAuthOpen(false)}
         onAuthed={() => {
           setAuthOpen(false);
-          // Wait for state to update and token to be stored
-          setTimeout(() => {
-            const token = localStorage.getItem("authToken");
-            if (token) {
-              try {
-                const payload = JSON.parse(atob(token.split(".")[1] || ""));
-                if (payload?.role === "admin") {
-                  // Use window.location to ensure full page navigation
-                  window.location.href = "/admin";
-                } else {
-                  // Regular user - just refresh to update UI
-                  window.location.reload();
-                }
-              } catch (error) {
-                console.error("Token parsing error:", error);
-                window.location.reload();
+          const userStr = localStorage.getItem("authUser");
+          if (userStr) {
+            try {
+              const u = JSON.parse(userStr);
+              if (u?.role === "admin") {
+                window.location.href = "/admin";
               }
-            }
-          }, 100);
+            } catch {}
+          }
         }}
       />
     </nav>

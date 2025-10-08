@@ -49,6 +49,8 @@ export default function AuthModal({ isOpen, onClose, onAuthed }: Props) {
       if (!data.success)
         throw new Error(data.message || "Authentication failed");
       if (data.token) localStorage.setItem("authToken", data.token);
+      if (data.user)
+        localStorage.setItem("authUser", JSON.stringify(data.user));
       onAuthed();
       onClose();
     } catch (err: any) {
