@@ -81,7 +81,7 @@ const Contact: React.FC = () => {
     {
       icon: <MapPin className="w-6 h-6" />,
       title: "Office Address",
-      details: ["123 Business District", "New York, NY 10001"],
+      details: ["123 Business Park", "Mumbai, MUM 400070"],
     },
     {
       icon: <Phone className="w-6 h-6" />,
