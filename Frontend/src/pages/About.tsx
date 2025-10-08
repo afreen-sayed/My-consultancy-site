@@ -87,13 +87,13 @@ export function About() {
               </div>
             </div>
 
-            <div className="relative">
+            <div className="relative pb-12 sm:pb-0">
               <img
                 src="/professional-team-collaboration.png"
                 alt="Professional team collaboration"
-                className="rounded-lg shadow-2xl"
+                className="w-full h-auto rounded-lg shadow-2xl"
               />
-              <div className="absolute -bottom-6 -right-6 bg-card p-6 rounded-lg shadow-lg border border-border/40">
+              <div className="absolute bottom-4 right-4 sm:-bottom-6 sm:-right-6 bg-card/95 backdrop-blur p-6 rounded-lg shadow-lg border border-border/40">
                 <div className="flex items-center gap-2 mb-2">
                   <Award size={20} className="text-primary" />
                   <span className="font-semibold">Industry Recognition</span>
