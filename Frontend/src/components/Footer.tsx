@@ -7,7 +7,9 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-foreground">ConsultPro</h3>
+            <h3 className="text-lg font-bold text-foreground">
+              Alight Infocom Consultancy
+            </h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Professional consultation services to help your business thrive in
               today's competitive landscape.
@@ -69,15 +71,21 @@ export function Footer() {
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Mail size={16} className="text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">
-                  hello@consultpro.com
-                </span>
+                <a
+                  href="mailto:info@alightinfocom.in"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
+                  info@alightinfocom.in
+                </a>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone size={16} className="text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">
-                  +1 (555) 123-4567
-                </span>
+                <a
+                  href="tel:+919321070511"
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
+                  +91 93210 70511
+                </a>
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin size={16} className="text-muted-foreground" />
@@ -91,7 +99,7 @@ export function Footer() {
 
         <div className="mt-8 pt-8 border-t border-border/40">
           <p className="text-center text-sm text-muted-foreground">
-            © 2025 ConsultPro. All rights reserved.
+            © 2025 Alight Infocom Consultancy. All rights reserved.
           </p>
         </div>
       </div>

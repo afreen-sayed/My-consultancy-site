@@ -86,12 +86,12 @@ const Contact: React.FC = () => {
     {
       icon: <Phone className="w-6 h-6" />,
       title: "Phone Number",
-      details: ["(555) 123-4567", "(555) 987-6543"],
+      details: ["+91 93210 70511"],
     },
     {
       icon: <Mail className="w-6 h-6" />,
       title: "Email Address",
-      details: ["contact@consultingpro.com", "support@consultingpro.com"],
+      details: ["info@alightinfocom.in"],
     },
     {
       icon: <Clock className="w-6 h-6" />,
@@ -107,7 +107,7 @@ const Contact: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
-              Get In Touch
+              Contact Alight Infocom Consultancy
             </h1>
             <p className="text-xl text-slate-300 max-w-3xl mx-auto text-pretty">
               Ready to transform your business? Contact us today for a free
@@ -130,8 +130,7 @@ const Contact: React.FC = () => {
               {isSubmitted && (
                 <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                   <p className="text-green-800 font-medium">
-                    Thank you for your message! We'll get back to you within 24
-                    hours.
+                    Thank you! We'll get back to you within 24 hours.
                   </p>
                 </div>
               )}
@@ -171,7 +170,7 @@ const Contact: React.FC = () => {
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-colors"
-                      placeholder="john@example.com"
+                      placeholder="you@example.com"
                     />
                   </div>
                 </div>
@@ -191,7 +190,7 @@ const Contact: React.FC = () => {
                       value={formData.phone}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-colors"
-                      placeholder="+1 (555) 123-4567"
+                      placeholder="+91 93210 70511"
                     />
                   </div>
                   <div>
@@ -214,8 +213,10 @@ const Contact: React.FC = () => {
                         Operations Optimization
                       </option>
                       <option value="digital">Digital Transformation</option>
-                      <option value="financial">Financial Planning</option>
-                      <option value="hr">HR Consulting</option>
+                      <option value="service">
+                        Managing IT Services Consultancy
+                      </option>
+                      <option value="cyber">Cyber Security Consulting</option>
                       <option value="other">Other</option>
                     </select>
                   </div>
@@ -322,7 +323,7 @@ const Contact: React.FC = () => {
                       Interactive map would be here
                     </p>
                     <p className="text-sm text-slate-400">
-                      123 Business District, New York, NY 10001
+                      123 Business Park, Mumbai, MUM 400070
                     </p>
                   </div>
                 </div>
